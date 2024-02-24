@@ -44,11 +44,10 @@ def currentJobs():
     cur.execute(statement)
     display = cur.fetchall()
     connection.commit()
-    print("Job Title, Company, Job Status")
-    for row in display:
-        print(row)
-
+    print(tabulate(display, headers=['Job Title', 'Company', 'Job Status'], tablefmt='psql'))
+    
     print()
+
 
 #function to delete job
 def deleteJob():
