@@ -48,6 +48,16 @@ def currentJobs():
     
     print()
 
+#function to show based on job status
+def selectSome():
+    status = input("What job status are you wanting to see?\n")
+    statement = f"SELECT * FROM jobs WHERE jobStatus = '{status}';"
+    cur.execute(statement)
+    display = cur.fetchall()
+    connection.commit()
+    print(tabulate(display, headers=['Job Title', 'Company', 'Job Status'], tablefmt='psql'))
+    
+    print()
 
 #function to delete job
 def deleteJob():
@@ -82,7 +92,8 @@ def menu():
     print("Option 2: Update a job that was applied for")
     print("Option 3: Delete a job that was applied for")
     print("Option 4: Display current jobs")
-    print("Option 5: Delete the whole darn thing")
+    print("Option 5: Display jobs by status")
+    print("Option 9: Delete the whole darn thing")
     print("Option 0: Exit the program")
 
 
@@ -104,6 +115,8 @@ while CHOICE != 0:
     elif CHOICE == "4":
         currentJobs()
     elif CHOICE == "5":
+        selectSome()
+    elif CHOICE == "9":
         deleteAll()
     elif CHOICE == "0":
         exit_program()
