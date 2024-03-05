@@ -1,6 +1,7 @@
 """This application is a CLI menu driven application to track jobs that are applied for and their status using SQL"""
 
 # imports
+from datetime import datetime
 import sqlite3 as sql
 import sys
 
@@ -8,8 +9,10 @@ import sys
 connection = sql.connect('jobTracker.db')
 cur = connection.cursor()
 
-createTable = '''CREATE TABLE IF NOT EXISTS jobs ([jobTitle] VARCHAR(50), [companyname] VARCHAR(50), [jobStatus] VARCHAR(50))'''
+createTable = '''CREATE TABLE IF NOT EXISTS jobs ([jobTitle] VARCHAR(50), [companyname] VARCHAR(50), [jobStatus] VARCHAR(50), [appliedDate] VARCHAR(12), [updatedDate] VARCHAR(12))'''
 cur.execute(createTable)
+
+CURRENTDATE = datetime.today().date()
 
 
 # functions
@@ -20,7 +23,7 @@ def inputJob():
     jobTitle = input("What is the job title?\n")
     jobStatus = input("What is the current application status?\n")
 
-    statement = f"INSERT INTO jobs VALUES ('{jobTitle}', '{company}', '{jobStatus}')"
+    statement = f"INSERT INTO jobs VALUES ('{jobTitle}', '{company}', '{jobStatus}', '{CURRENTDATE}', '{CURRENTDATE}')"
 
     cur.execute(statement)
     connection.commit()
@@ -32,7 +35,7 @@ def updateJob():
     company = input("What is the company that you would like to update job status at?\n")
     jobStatus = input("What is the current job status?\n")
 
-    statement = f"UPDATE jobs SET jobStatus = '{jobStatus}' WHERE companyname = '{company}'"
+    statement = f"UPDATE jobs SET jobStatus = '{jobStatus}', updatedDate = '{CURRENTDATE}' WHERE companyname = '{company}'"
 
     cur.execute(statement)
     connection.commit()
@@ -44,7 +47,7 @@ def currentJobs():
     cur.execute(statement)
     display = cur.fetchall()
     connection.commit()
-    print(tabulate(display, headers=['Job Title', 'Company', 'Job Status'], tablefmt='psql'))
+    print(tabulate(display, headers=['Job Title', 'Company', 'Job Status', 'Date Applied', 'Date Updated'], tablefmt='psql'))
     
     print()
 
@@ -55,7 +58,7 @@ def selectSome():
     cur.execute(statement)
     display = cur.fetchall()
     connection.commit()
-    print(tabulate(display, headers=['Job Title', 'Company', 'Job Status'], tablefmt='psql'))
+    print(tabulate(display, headers=['Job Title', 'Company', 'Job Status', 'Date Applied', 'Date Updated'], tablefmt='psql'))
     
     print()
 
