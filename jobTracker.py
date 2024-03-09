@@ -4,6 +4,7 @@
 from datetime import datetime
 import sqlite3 as sql
 import sys
+from tabulate import tabulate
 
 #Create table
 connection = sql.connect('jobTracker.db')
@@ -58,6 +59,7 @@ def massUpdate():
 
 # function to see current standings
 def currentJobs():
+    count = 0
     """This function is to display all the jobs that are not denied"""
     statement = f"SELECT * FROM jobs WHERE jobStatus = 'In Progress' OR jobStatus = 'Submitted'"
     cur.execute(statement)
@@ -65,7 +67,7 @@ def currentJobs():
     connection.commit()
     print(tabulate(display, headers=['Job Title', 'Company', 'Job Status', 'Date Applied', 'Date Updated'], tablefmt='psql'))
     for results in display:
-        count ++
+        count+=1
     print("There is currently", count, "applications that you have submitted")
     
     print()
@@ -80,7 +82,7 @@ def allJobs():
     cur.execute(statement)
     display = cur.fetchall()
     connection.commit()
-    print(tabulate(display, headers=['Job Title', 'Company', 'Job Status'], tablefmt='psql'))
+    print(tabulate(display, headers=['Job Title', 'Company', 'Job Status', 'Date Applied', 'Date Updated'], tablefmt='psql'))
 
     for results in display:
         count+=1
