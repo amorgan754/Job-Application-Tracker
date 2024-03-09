@@ -25,9 +25,11 @@ def inputJob():
     jobTitle = input("What is the job title?\n")
     jobStatus = input("What is the current application status?\n")
 
-    statement = f"INSERT INTO jobs VALUES ('{jobTitle}', '{company}', '{jobStatus}', '{CURRENTDATE}', '{CURRENTDATE}')"
+    parameters = (jobTitle, company, jobStatus)
 
-    cur.execute(statement)
+    statement = f"INSERT INTO jobs VALUES (?, ?, ?, '{CURRENTDATE}', '{CURRENTDATE}')"
+
+    cur.execute(statement, parameters)
     connection.commit()
     print()
 
