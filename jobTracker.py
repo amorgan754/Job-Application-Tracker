@@ -38,9 +38,11 @@ def updateJob():
     company = input("What is the company that you would like to update job status at?\n")
     jobStatus = input("What is the current job status?\n")
 
-    statement = f"UPDATE jobs SET jobStatus = '{jobStatus}', updatedDate = '{CURRENTDATE}' WHERE companyname = '{company}'"
+    parameters = (jobStatus, company)
 
-    cur.execute(statement)
+    statement = f"UPDATE jobs SET jobStatus = ?, updatedDate = '{CURRENTDATE}' WHERE companyname = ?"
+
+    cur.execute(statement, parameters)
     connection.commit()
     print()
 
@@ -51,9 +53,11 @@ def massUpdate():
     jobStatus = input("What is the status you would like to update?\n")
     newStatus = input("What is the new status of the jobs?\n")
 
-    statement = f"UPDATE jobs SET jobStatus = '{newStatus}', updatedDate = '{CURRENTDATE}' WHERE jobStatus = '{jobStatus}'"
+    parameters = (newStatus, jobStatus)
 
-    cur.execute(statement)
+    statement = f"UPDATE jobs SET jobStatus = ?, updatedDate = '{CURRENTDATE}' WHERE jobStatus = ?"
+
+    cur.execute(statement, parameters)
     connection.commit()
     print()
 
@@ -96,8 +100,11 @@ def allJobs():
 def selectSome():
     """This function is to select jobs based on status"""
     status = input("What job status are you wanting to see?\n")
-    statement = f"SELECT * FROM jobs WHERE jobStatus = '{status}';"
-    cur.execute(statement)
+
+    parameters = (status)
+
+    statement = f"SELECT * FROM jobs WHERE jobStatus = ?;"
+    cur.execute(statement, parameters)
     display = cur.fetchall()
     connection.commit()
     print(tabulate(display, headers=['Job Title', 'Company', 'Job Status', 'Date Applied', 'Date Updated'], tablefmt='psql'))
@@ -110,9 +117,12 @@ def deleteJob():
     currentJobs()
     company = input("What is the company that you would like to delete the job from?\n")
     jobTitle = input("What is the job title that you would like to delete?\n")
+
+    parameters = (company, jobTitle)
+
     statement = f"DELETE FROM jobs WHERE companyname = '{company}' AND jobTitle = '{jobTitle}'"
 
-    cur.execute(statement)
+    cur.execute(statement, parameters)
 
     connection.commit()
     print()
