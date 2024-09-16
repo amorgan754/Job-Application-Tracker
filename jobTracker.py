@@ -67,7 +67,7 @@ def massUpdate():
 def currentJobs():
     count = 0
     """This function is to display all the jobs that are not denied"""
-    statement = f"SELECT * FROM jobs WHERE jobStatus = 'In Progress' OR jobStatus = 'Submitted'"
+    statement = f"SELECT * FROM jobs WHERE jobStatus = 'In Progress' OR jobStatus = 'Submitted' OR jobStatus = 'Interviewing'"
     cur.execute(statement)
     display = cur.fetchall()
     connection.commit()
@@ -179,6 +179,8 @@ def updateMenu():
             deleteJob()
         elif CHOICE == 5:
             deleteAll()
+        else:
+            print("\nPlease make a valid choice\n")
 
 
 
@@ -202,6 +204,8 @@ def displayMenu():
             allJobs()
         elif CHOICE == 3:
             selectSome()
+        else:
+            print("\nPlease make a valid choice\n")
 
 
 #use while loop
